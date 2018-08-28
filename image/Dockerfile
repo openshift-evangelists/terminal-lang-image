@@ -25,7 +25,7 @@ RUN source scl_source enable rh-python36 && \
     chown -R 1001:0 /opt/app-root && \
     fix-permissions /opt/app-root -P
 
-COPY profiles/. /opt/terminal/etc/profiles.d/
+COPY profiles/. /opt/terminal/etc/profile.d/
 
 # Install Java JDK 8, Maven 3.3, Gradle 2.6.
 
