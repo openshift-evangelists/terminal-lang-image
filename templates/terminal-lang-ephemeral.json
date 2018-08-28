@@ -53,7 +53,7 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${APPLICATION_NAME}",
+                "name": "${APPLICATION_NAME}-base",
                 "labels": {
                     "app": "${APPLICATION_NAME}"
                 }
@@ -96,7 +96,7 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "${APPLICATION_NAME}:latest"
+                        "name": "${APPLICATION_NAME}-base:latest"
                     }
                 }
             }
@@ -148,7 +148,7 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "${APPLICATION_NAME}:latest"
+                        "name": "${APPLICATION_NAME}-lang:latest"
                     }
                 }
             }

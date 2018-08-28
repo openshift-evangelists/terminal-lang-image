@@ -2,15 +2,15 @@
     "kind": "Template",
     "apiVersion": "v1",
     "metadata": {
-        "name": "terminal-base-persistent",
+        "name": "terminal-lang-persistent",
         "annotations": {
-            "openshift.io/display-name": "Terminal (Persistent/Base Image)"
+            "openshift.io/display-name": "Terminal (Persistent/Languages Image)"
         }
     },
     "parameters": [
         {
             "name": "APPLICATION_NAME",
-            "value": "terminal-base-persistent",
+            "value": "terminal-lang-persistent",
             "required": true
         },
         {
@@ -58,20 +58,17 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${APPLICATION_NAME}",
+                "name": "${APPLICATION_NAME}-base",
                 "labels": {
                     "app": "${APPLICATION_NAME}"
                 }
-            },
-	    "lookupPolicy": {
-		"local": true
-	    }
+            }
         },
         {
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${APPLICATION_NAME}",
+                "name": "${APPLICATION_NAME}-base",
                 "labels": {
                     "app": "${APPLICATION_NAME}"
                 }
@@ -104,7 +101,59 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "${APPLICATION_NAME}:latest"
+                        "name": "${APPLICATION_NAME}-base:latest"
+                    }
+                }
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}-lang",
+                "labels": {
+                    "app": "${APPLICATION_NAME}"
+                }
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}-lang",
+                "labels": {
+                    "app": "${APPLICATION_NAME}"
+                }
+            },
+            "spec": {
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ],
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "https://github.com/openshift-evangelists/terminal-lang-image.git"
+                    },
+                    "contextDir": "image"
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "${APPLICATION_NAME}-base:latest"
+                        }
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${APPLICATION_NAME}-lang:latest"
                     }
                 }
             }
@@ -155,7 +204,7 @@
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
-                                "name": "${APPLICATION_NAME}:latest"
+                                "name": "${APPLICATION_NAME}-lang:latest"
                             }
                         }
                     }
@@ -182,7 +231,7 @@
 				    "/opt/app-root",
 				    "/mnt/workspace"
 				],
-				"image": "${APPLICATION_NAME}:latest",
+				"image": "${APPLICATION_NAME}-lang:latest",
 				"volumeMounts": [
 				    {
 					"name": "data",
@@ -194,7 +243,7 @@
                         "containers": [
                             {
                                 "name": "terminal",
-                                "image": "${APPLICATION_NAME}:latest",
+                                "image": "${APPLICATION_NAME}-lang:latest",
                                 "ports": [
                                     {
                                         "containerPort": 8080,
