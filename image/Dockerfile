@@ -7,7 +7,7 @@ USER root
 ENV PYTHON_VERSION=3.6
 RUN HOME=/root && \
     INSTALL_PKGS="rh-python36 rh-python36-python-devel \
-        rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
+        rh-python36-python-setuptools rh-python36-python-pip \
         httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb \
         httpd24-mod_ldap httpd24-mod_session atlas-devel gcc-gfortran \
         libffi-devel libtool-ltdl" && \
