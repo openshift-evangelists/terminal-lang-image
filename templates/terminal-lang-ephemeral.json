@@ -10,7 +10,7 @@
     "parameters": [
         {
             "name": "APPLICATION_NAME",
-            "value": "terminal-lang-ephemeral",
+            "value": "terminal",
             "required": true
         },
         {
@@ -157,7 +157,7 @@
             "kind": "DeploymentConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${APPLICATION_NAME}",
+                "name": "${APPLICATION_NAME}-ephemeral",
                 "labels": {
                     "app": "${APPLICATION_NAME}"
                 }

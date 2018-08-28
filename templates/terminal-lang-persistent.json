@@ -10,7 +10,7 @@
     "parameters": [
         {
             "name": "APPLICATION_NAME",
-            "value": "terminal-lang-persistent",
+            "value": "terminal",
             "required": true
         },
         {
@@ -182,7 +182,7 @@
             "kind": "DeploymentConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${APPLICATION_NAME}",
+                "name": "${APPLICATION_NAME}-persistent",
                 "labels": {
                     "app": "${APPLICATION_NAME}"
                 }
