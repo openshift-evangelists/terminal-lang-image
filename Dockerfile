@@ -1,4 +1,4 @@
-FROM terminal-base-centos7:latest
+FROM workshop-base-centos7:latest
 
 USER root
 
@@ -25,7 +25,7 @@ RUN source scl_source enable rh-python36 && \
     chown -R 1001:0 /opt/app-root && \
     fix-permissions /opt/app-root -P
 
-COPY profiles/. /opt/terminal/etc/profile.d/
+COPY profiles/. /opt/workshop/etc/profile.d/
 
 # Install Java JDK 8, Maven 3.3, Gradle 2.6.
 

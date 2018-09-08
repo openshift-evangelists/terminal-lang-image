@@ -2,15 +2,15 @@
     "kind": "Template",
     "apiVersion": "v1",
     "metadata": {
-        "name": "terminal-lang-ephemeral",
+        "name": "workshop-lang-ephemeral",
         "annotations": {
-            "openshift.io/display-name": "Terminal (Ephemeral/Languages Image)"
+            "openshift.io/display-name": "Workshop (Lang/Ephemeral)"
         }
     },
     "parameters": [
         {
             "name": "APPLICATION_NAME",
-            "value": "terminal-lang-ephemeral",
+            "value": "workshop",
             "required": true
         },
         {
@@ -21,6 +21,11 @@
         {
             "name": "OC_VERSION",
             "value": "3.10.41",
+            "required": true
+        },
+        {
+            "name": "KUBECTL_VERSION",
+            "value": "1.10.0",
             "required": true
         }
     ],
@@ -85,9 +90,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/openshift-evangelists/terminal-base-image.git"
-                    },
-                    "contextDir": "image"
+                        "uri": "https://github.com/openshift-evangelists/workshop-base-image.git"
+                    }
                 },
                 "strategy": {
                     "type": "Docker",
@@ -100,6 +104,10 @@
                             {
                                 "name": "OC_VERSION",
                                 "value": "${OC_VERSION}"
+                            },
+                            {
+                                "name": "KUBECTL_VERSION",
+                                "value": "${KUBECTL_VERSION}"
                             }
                         ]
                     }
@@ -143,9 +151,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/openshift-evangelists/terminal-lang-image.git"
-                    },
-                    "contextDir": "image"
+                        "uri": "https://github.com/openshift-evangelists/workshop-lang-image.git"
+                    }
                 },
                 "strategy": {
                     "type": "Docker",
@@ -186,7 +193,7 @@
                         "imageChangeParams": {
                             "automatic": true,
                             "containerNames": [
-                                "terminal"
+                                "workshop"
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
@@ -211,7 +218,7 @@
                         "serviceAccountName": "${APPLICATION_NAME}-role",
                         "containers": [
                             {
-                                "name": "terminal",
+                                "name": "workshop",
                                 "image": "${APPLICATION_NAME}-lang:latest",
                                 "ports": [
                                     {
@@ -256,9 +263,6 @@
                 "name": "${APPLICATION_NAME}",
                 "labels": {
                     "app": "${APPLICATION_NAME}"
-                },
-                "annotations": {
-                    "haproxy.router.openshift.io/hsts_header": "max-age=31536000;includeSubDomains"
                 }
             },
             "spec": {
@@ -272,7 +276,8 @@
                     "targetPort": "8080-tcp"
                 },
                 "tls": {
-                    "termination": "edge"
+                    "termination": "edge",
+                    "insecureEdgeTerminationPolicy": "Redirect"
                 }
             }
         }
