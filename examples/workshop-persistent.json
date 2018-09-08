@@ -34,11 +34,11 @@
             "required": true
         },
         {
-            "name": "TERMINAL_USER",
+            "name": "AUTH_USERNAME",
             "value": ""
         },
         {
-            "name": "TERMINAL_PASS",
+            "name": "AUTH_PASSWORD",
             "value": ""
         }
     ],
@@ -284,12 +284,12 @@
                                 ],
                                 "env": [
                                     {
-                                        "name": "TERMINAL_USER",
-                                        "value": "${TERMINAL_USER}"
+                                        "name": "AUTH_USERNAME",
+                                        "value": "${AUTH_USERNAME}"
                                     },
                                     {
-                                        "name": "TERMINAL_PASS",
-                                        "value": "${TERMINAL_PASS}"
+                                        "name": "AUTH_PASSWORD",
+                                        "value": "${AUTH_PASSWORD}"
                                     }
                                 ],
 				"volumeMounts": [
