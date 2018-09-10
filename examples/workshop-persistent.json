@@ -14,6 +14,11 @@
             "required": true
         },
         {
+            "name": "WORKSHOP_URL",
+            "value": "https://github.com/openshift-evangelists/labs-workshop-guide.git",
+            "required": true
+        },
+        {
             "name": "PROJECT_ROLE",
             "value": "view",
             "required": true
@@ -211,6 +216,60 @@
 	    }
 	},
         {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}-labs",
+                "labels": {
+                    "app": "${APPLICATION_NAME}"
+                }
+            },
+            "lookupPolicy": {
+                "local": true
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${APPLICATION_NAME}-labs",
+                "labels": {
+                    "app": "${APPLICATION_NAME}"
+                }
+            },
+            "spec": {
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange"
+                    }
+                ],
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "${WORKSHOP_URL}"
+                    }
+                },
+                "strategy": {
+                    "type": "Source",
+                    "sourceStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "${APPLICATION_NAME}-base:latest"
+                        }
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${APPLICATION_NAME}-labs:latest"
+                    }
+                }
+            }
+        },
+        {
             "kind": "DeploymentConfig",
             "apiVersion": "v1",
             "metadata": {
@@ -232,11 +291,12 @@
                         "imageChangeParams": {
                             "automatic": true,
                             "containerNames": [
+                                "setup-volume",
                                 "workshop"
                             ],
                             "from": {
                                 "kind": "ImageStreamTag",
-                                "name": "${APPLICATION_NAME}-lang:latest"
+                                "name": "${APPLICATION_NAME}-labs:latest"
                             }
                         }
                     }
@@ -263,7 +323,7 @@
 				    "/opt/app-root",
 				    "/mnt/workspace"
 				],
-				"image": "${APPLICATION_NAME}-lang:latest",
+				"image": "${APPLICATION_NAME}-labs:latest",
 				"volumeMounts": [
 				    {
 					"name": "data",
@@ -275,7 +335,7 @@
                         "containers": [
                             {
                                 "name": "workshop",
-                                "image": "${APPLICATION_NAME}-lang:latest",
+                                "image": "${APPLICATION_NAME}-labs:latest",
                                 "ports": [
                                     {
                                         "containerPort": 8080,
